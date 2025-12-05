@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Big Cat Classifier</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #e7e7e7;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .card {
+            background: white;
+            width: 100%;
+            max-width: 420px;
+            padding: 30px 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .title {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .title img {
+            width: 45px;
+            height: 45px;
+            object-fit: contain;
+        }
+
+        .info {
+            font-size: 14px;
+            color: #444;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .info h4 {
+            margin: 0 0 8px 0;
+            color: #000;
+        }
+
+        .info p {
+            margin: 0;
+            font-size: 13.5px;
+        }
+
+        .file-box {
+            display: flex;
+            border: 2px dashed #aaa;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .file-box input[type="file"] {
+            display: none;
+        }
+
+        .file-label {
+            flex: 1;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 15px;
+            color: #555;
+        }
+
+        .predict-btn {
+            background: #000;
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            border-radius: 0 12px 12px 0;
+            min-width: 120px;
+        }
+
+        .predict-btn:hover {
+            background: #333;
+        }
+
+        .predict-btn:active {
+            background: #111;
+        }
+
+        hr {
+            margin: 25px 0;
+            border: none;
+            border-top: 1px solid #eee;
+        }
+
+        .prediction-box {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .prediction-box strong {
+            font-size: 22px;
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .uploaded-img {
+            margin-top: 15px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            filter: grayscale(100%);
+        }
+
+        /* Better touch targets on mobile */
+        @media (max-width: 480px) {
+            .card {
+                padding: 25px 20px;
+            }
+
+            .title {
+                font-size: 24px;
+            }
+
+            .predict-btn {
+                padding: 16px 20px;
+                font-size: 17px;
+            }
+
+            .file-label {
+                padding: 18px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="title">
+        <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Big Cat Logo">
+        BIG CAT CLASSIFIER
+    </div>
+
+    <div class="info">
+        <h4>You can upload images of these big cats:</h4>
+        <p>
+            African Leopard • Caracal • Cheetah • Clouded Leopard • Jaguar • Lion • Ocelot • Puma • Snow Leopard • Tiger
+        </p>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" id="uploadForm">
+        <div class="file-box">
+            <label for="fileInput" class="file-label">Choose Image...</label>
+            <input type="file" name="file" id="fileInput" accept="image/*" required>
+            <button class="predict-btn" type="submit">PREDICT</button>
+        </div>
+    </form>
+
+    <hr>
+
+    {% if prediction %}
+        <div class="prediction-box">
+            <strong> PREDICTION: {{ prediction }}</strong>
+
+            {% if img_path %}
+                <img src="{{ img_path }}" alt="Uploaded big cat" class="uploaded-img">
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+
+<script>
+    const fileInput = document.getElementById('fileInput');
+    const fileLabel = document.querySelector('.file-label');
+
+    fileInput.addEventListener('change', function() {
+        if (fileInput.files.length > 0) {
+            fileLabel.textContent = fileInput.files[0].name;
+        } else {
+            fileLabel.textContent = 'Choose Image...';
+        }
+    });
+</script>
+
+</body>
+</html>
