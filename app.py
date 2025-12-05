@@ -7,7 +7,7 @@ import numpy as np
 import os
 
 app = Flask(__name__)
-UPLOAD_FOLDER = '/tmp/uploads'
+UPLOAD_FOLDER = 'static/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # Load model
@@ -55,4 +55,4 @@ def index():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+    app.run(debug=True)
